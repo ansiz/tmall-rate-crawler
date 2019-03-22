@@ -57,6 +57,11 @@ func main() {
 					Value: 1,
 					Usage: "The start page number",
 				},
+				cli.StringFlag{
+					Name:  "output,o",
+					Value: "result.csv",
+					Usage: "The output file name",
+				},
 			},
 			Action: func(c *cli.Context) error {
 				cfg := &pkg.Config{

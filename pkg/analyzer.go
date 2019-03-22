@@ -7,7 +7,9 @@ import (
 )
 
 // Analyzer represents the data analyzer.
-type Analyzer struct{}
+type Analyzer struct {
+	OutputFile string
+}
 
 // Data represents the response data.
 type Data struct {
@@ -36,8 +38,10 @@ type Paginator struct {
 }
 
 // NewAnalyzer returns analyzer
-func NewAnalyzer() *Analyzer {
-	return &Analyzer{}
+func NewAnalyzer(output string) *Analyzer {
+	return &Analyzer{
+		OutputFile: output,
+	}
 }
 
 // SaveToCSV saves data to CSV file.

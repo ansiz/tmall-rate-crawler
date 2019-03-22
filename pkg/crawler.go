@@ -27,13 +27,14 @@ type Config struct {
 	UserAgent       string
 	ItemID          string
 	SellerID        string
+	Output          string
 	RequestInterval time.Duration
 }
 
 // NewCrawler creates new crawler.
 func NewCrawler(c *Config) *Crawler {
 	return &Crawler{
-		analyzer: NewAnalyzer(),
+		analyzer: NewAnalyzer(c.Output),
 		config: &Config{
 			UserAgent:       c.UserAgent,
 			Cookie:          c.Cookie,
