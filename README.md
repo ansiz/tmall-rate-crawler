@@ -12,7 +12,9 @@ Tmall products rating data crawler. （being developed）
 
 ### TODO
 
+- Get product info automatically
 - Implement data analyzer
+- Chrome extension plugin
 
 ## Quick Start
 
