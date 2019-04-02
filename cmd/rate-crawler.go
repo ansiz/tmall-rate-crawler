@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"os"
-	"time"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/ansiz/tmall-rate-crawler/pkg"
@@ -21,22 +20,32 @@ func main() {
 			Name:  "verbose",
 			Usage: "run in verbose mode",
 		},
+		cli.StringFlag{
+			Name:  "user-agent",
+			Value: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36",
+			Usage: "The HTTP request user-agent header",
+		},
+		cli.StringFlag{
+			Name:  "cookie,c",
+			Value: "",
+			Usage: "The cookie data",
+		},
+		cli.IntFlag{
+			Name:  "interval-min",
+			Value: 5,
+			Usage: "The minion request interval(Second)",
+		},
+		cli.IntFlag{
+			Name:  "interval-max",
+			Value: 15,
+			Usage: "The max request interval(Second)",
+		},
 	}
 	app.Commands = []cli.Command{
 		{
-			Name:  "fetch",
+			Name:  "rate",
 			Usage: "fetch specified item's rate data",
 			Flags: []cli.Flag{
-				cli.StringFlag{
-					Name:  "user-agent",
-					Value: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36",
-					Usage: "The HTTP request user-agent header",
-				},
-				cli.StringFlag{
-					Name:  "cookie,c",
-					Value: "",
-					Usage: "The cookie data",
-				},
 				cli.StringFlag{
 					Name:  "item,i",
 					Value: "",
@@ -46,11 +55,6 @@ func main() {
 					Name:  "seller,s",
 					Value: "",
 					Usage: "The seller ID",
-				},
-				cli.IntFlag{
-					Name:  "interval",
-					Value: 3,
-					Usage: "The request interval(Second)",
 				},
 				cli.IntFlag{
 					Name:  "start",
@@ -65,11 +69,13 @@ func main() {
 			},
 			Action: func(c *cli.Context) error {
 				cfg := &pkg.Config{
-					UserAgent:       c.String("user-agent"),
-					Cookie:          c.String("cookie"),
-					ItemID:          c.String("item"),
-					SellerID:        c.String("seller"),
-					RequestInterval: time.Second * time.Duration(c.Int("interval")),
+					UserAgent:          c.GlobalString("user-agent"),
+					Cookie:             c.GlobalString("cookie"),
+					ItemID:             c.String("item"),
+					SellerID:           c.String("seller"),
+					RequestIntervalMin: c.GlobalInt("interval-min"),
+					RequestIntervalMax: c.GlobalInt("interval-max"),
+					Output:             c.String("output"),
 				}
 				if cfg.Cookie == "" {
 					return errors.New("missing required cookie data")
@@ -81,7 +87,50 @@ func main() {
 					return errors.New("missing required seller id")
 				}
 				crawler := pkg.NewCrawler(cfg)
-				err := crawler.Crawling(c.Int("start"))
+				err := crawler.CrawlItemRate(c.Int("start"))
+				if err != nil {
+					log.Error("fetch data error: %v", err)
+					return err
+				}
+				return nil
+			},
+		}, {
+			Name:  "item",
+			Usage: "fetch shop items data",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "url",
+					Value: "",
+					Usage: "The shop URL",
+				},
+				cli.IntFlag{
+					Name:  "start",
+					Value: 1,
+					Usage: "The start page number",
+				},
+				cli.StringFlag{
+					Name:  "output,o",
+					Value: "shop-items.csv",
+					Usage: "The output file name",
+				},
+			},
+			Action: func(c *cli.Context) error {
+				cfg := &pkg.Config{
+					UserAgent:          c.GlobalString("user-agent"),
+					Cookie:             c.GlobalString("cookie"),
+					RequestIntervalMin: c.GlobalInt("interval-min"),
+					RequestIntervalMax: c.GlobalInt("interval-max"),
+					Output:             c.String("output"),
+				}
+				if cfg.Cookie == "" {
+					return errors.New("missing required cookie data")
+				}
+				shopURL := c.String("url")
+				if shopURL == "" {
+					return errors.New("missing required shop URL")
+				}
+				crawler := pkg.NewCrawler(cfg)
+				err := crawler.CrawlItems(shopURL, c.Int("start"))
 				if err != nil {
 					log.Error("fetch data error: %v", err)
 					return err
