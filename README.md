@@ -36,19 +36,27 @@ make install
 
 ```txt
 NAME:
-   rate-crawler fetch - fetch specified item's rate data
+   Tmall rate crawler - Crawl rate data from Tmall
 
 USAGE:
-   rate-crawler fetch [command options] [arguments...]
+   rate-crawler [global options] command [command options] [arguments...]
 
-OPTIONS:
+VERSION:
+   0.1.0
+
+COMMANDS:
+     rate     fetch specified item's rate data
+     item     fetch shop items data
+     help, h  Shows a list of commands or help for one command
+
+GLOBAL OPTIONS:
+   --verbose                 run in verbose mode
    --user-agent value        The HTTP request user-agent header (default: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36")
    --cookie value, -c value  The cookie data
-   --item value, -i value    The item ID
-   --seller value, -s value  The seller ID
-   --interval value          The request interval(Second) (default: 3)
-   --start value             The start page number (default: 1)
-   --output value, -o value  The output file name (default: "result.csv")
+   --interval-min value      The minion request interval(Second) (default: 5)
+   --interval-max value      The max request interval(Second) (default: 15)
+   --help, -h                show help
+   --version, -v             print the version
 ```
 
 ### Example

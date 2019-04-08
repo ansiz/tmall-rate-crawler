@@ -98,6 +98,7 @@ func (a *Analyzer) SaveItemToCSV(itemData *ItemInfo) error {
 	for _, item := range itemData.Items {
 		records = append(records, []string{
 			strconv.FormatInt(item.ItemID, 10),
+			itemData.UserID,
 			item.Title, item.Img, item.Price, item.Sold,
 			strconv.Itoa(item.Quantity),
 			strconv.Itoa(item.TotalSoldQuantity),
