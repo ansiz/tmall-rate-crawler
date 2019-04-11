@@ -84,7 +84,7 @@ func (c *Crawler) CrawlItems(shopURL string, page int) error {
 	}
 	cur, _ := strconv.Atoi(itemData.CurrentPage)
 	total, _ := strconv.Atoi(itemData.TotalPage)
-	log.Debugf("Task(shop:%s, has %s items) progress: %d/%d",
+	log.Infof("Task(shop:%s, has %s items) progress: %d/%d",
 		itemData.ShopTitle, itemData.TotalResults, cur, total)
 	if cur != total {
 		c.randomSleep()

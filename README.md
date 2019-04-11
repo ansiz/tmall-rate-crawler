@@ -8,11 +8,12 @@ Tmall products rating data crawler. （being developed）
 
 ### Features
 
-- Fetch rating data
+- Fetch comment data
+- Fetch shop items data
 
 ### TODO
 
-- Get product info automatically
+- Automatically fetch comment data based on product id
 - Implement data analyzer
 - Chrome extension plugin
 
