@@ -109,6 +109,11 @@ func main() {
 					Usage: "The start page number",
 				},
 				cli.StringFlag{
+					Name:  "sort",
+					Value: "d",
+					Usage: "The sort rule (d:销量 s:综合 p:价格 oldstarts:新品优先)",
+				},
+				cli.StringFlag{
 					Name:  "output,o",
 					Value: "shop-items.csv",
 					Usage: "The output file name",
@@ -121,6 +126,7 @@ func main() {
 					RequestIntervalMin: c.GlobalInt("interval-min"),
 					RequestIntervalMax: c.GlobalInt("interval-max"),
 					Output:             c.String("output"),
+					SortKey:            c.String("sort"),
 				}
 				if cfg.Cookie == "" {
 					return errors.New("missing required cookie data")

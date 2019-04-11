@@ -29,6 +29,7 @@ type Config struct {
 	ItemID             string
 	SellerID           string
 	Output             string
+	SortKey            string
 	RequestIntervalMin int
 	RequestIntervalMax int
 }
@@ -44,6 +45,7 @@ func NewCrawler(c *Config) *Crawler {
 			SellerID:           c.SellerID,
 			RequestIntervalMin: c.RequestIntervalMin,
 			RequestIntervalMax: c.RequestIntervalMax,
+			SortKey:            c.SortKey,
 		},
 	}
 }
@@ -56,6 +58,7 @@ func (c *Crawler) CrawlItems(shopURL string, page int) error {
 	}
 	params := url.Values{}
 	params.Add("p", strconv.Itoa(page))
+	params.Add("sort", c.config.SortKey)
 	req.URL.RawQuery = params.Encode()
 	log.Debug("request URI:", req.URL.String())
 
